@@ -1,4 +1,4 @@
-﻿namespace reserv_plt.Server.Models
+﻿namespace reserv_plt.DataLayer.Models
 {
     public class Reservation
     {

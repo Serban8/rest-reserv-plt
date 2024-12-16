@@ -1,16 +1,30 @@
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using reserv_plt.Server.Settings;
+using System.Reflection;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//for testing on localhost only
+builder.Services.AddCors(corsBuilder =>
+{
+    corsBuilder.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
+    });
+});
+//
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services to the container.
+Dependencies.Inject(builder);
+
+//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -19,10 +33,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
-app.MapControllers();
+//for testing on localhost only
+app.UseCors("AllowAll");
+//
 
-app.MapFallbackToFile("/index.html");
+app.MapControllers();
 
 app.Run();

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using reserv_plt.Server.Dtos;
-using reserv_plt.Server.Models; 
-using reserv_plt.Server.Data;
+using reserv_plt.Core.Dtos;
+using reserv_plt.DataLayer.Models; 
+using reserv_plt.DataLayer;
 
 namespace reserv_plt.Server.Controllers
 {

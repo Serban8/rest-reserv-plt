@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using reserv_plt.Server.Models;
+using reserv_plt.DataLayer.Models;
 
 
-namespace reserv_plt.Server.Data
+namespace reserv_plt.DataLayer
 {
 
 
