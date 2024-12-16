@@ -1,4 +1,3 @@
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using reserv_plt.Server.Settings;
 using System.Reflection;
