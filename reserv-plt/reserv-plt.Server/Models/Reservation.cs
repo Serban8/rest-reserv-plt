@@ -3,8 +3,8 @@
     public class Reservation
     {
 
-        public int Id { get; set; }
-        public int TableId { get; set; }
+        public Guid Id { get; set; }
+        public Guid TableId { get; set; }
         public Table Table { get; set; }
 
         public string CustomerName { get; set; }

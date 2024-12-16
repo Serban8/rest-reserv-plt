@@ -2,8 +2,15 @@
 {
     public class TableDto
     (
-         Guid id,
+         Guid Id,
          int TableNumber,
-         bool isAvailable
-    );
+         bool IsAvailable
+    )
+    {
+        public Guid Id { get; internal set; }
+
+        public int TableNumber { get; internal set; }
+
+        public bool IsAvailable { get; internal set; }
+    }
 }
