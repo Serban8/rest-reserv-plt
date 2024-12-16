@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using reserv_plt.DataLayer;
 using reserv_plt.Core.Dtos;
 using reserv_plt.DataLayer.Models;
+using Core.Services;
 
 namespace reserv_plt.Server.Controllers
 {
@@ -10,27 +11,23 @@ namespace reserv_plt.Server.Controllers
     [Route("api/[controller]")]
     public class FeedbackController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly FeedbackService _feedbackService;
 
-        public FeedbackController(AppDbContext context)
+        public FeedbackController(FeedbackService feedbackService)
         {
-            _context = context;
+            _feedbackService = feedbackService;
         }
 
         // POST: api/Feedback
         [HttpPost]
         public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackDto feedbackDto)
         {
-            var feedback = new Feedback
-            {
-                Id = Guid.NewGuid(),
-                CustomerName = feedbackDto.CustomerName,
-                Comment = feedbackDto.Comment,
-                Rating = feedbackDto.Rating,
-            };
+            bool ret = await _feedbackService.Add(feedbackDto);
 
-            _context.Feedbacks.Add(feedback);
-            await _context.SaveChangesAsync();
+            if (!ret)
+            {
+                return BadRequest("Failed to submit feedback.");
+            }
 
             return Ok("Feedback submitted successfully.");
         }
@@ -39,13 +36,7 @@ namespace reserv_plt.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFeedbacks()
         {
-            var feedbacks = await _context.Feedbacks
-                .Select(f => new FeedbackDto(
-                    f.CustomerName,
-                    f.Comment,
-                    f.Rating
-                ))
-                .ToListAsync();
+            var feedbacks = await _feedbackService.GetFeedbacks();
 
             return Ok(feedbacks);
         }

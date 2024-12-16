@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using reserv_plt.Core.Dtos;
 using reserv_plt.DataLayer.Models; 
 using reserv_plt.DataLayer;
+using Core.Services;
 
 namespace reserv_plt.Server.Controllers
 {
@@ -10,26 +11,18 @@ namespace reserv_plt.Server.Controllers
     [Route("api/[controller]")]
     public class TableController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly TableService _tableService;
 
-        public TableController(AppDbContext context)
+        public TableController(TableService tableService)
         {
-            _context = context;
+            _tableService = tableService;
         }
 
         // GET: api/Table
         [HttpGet]
         public async Task<IActionResult> GetAvailableTables()
         {
-            var tables = await _context.Tables
-                .Where(t => t.IsAvailable)
-                .Select(t => new TableDto(
-                    t.Id,
-                    t.TableNumber,
-                    t.IsAvailable
-                ))
-                .ToListAsync();
-
+            var tables = await _tableService.GetAvailableTables();
             return Ok(tables);
         }
 
@@ -37,35 +30,7 @@ namespace reserv_plt.Server.Controllers
         [HttpPost("Reserve")]
         public async Task<IActionResult> ReserveTable([FromBody] ReservationRequestDto request)
         {
-            var table = await _context.Tables
-                .FirstOrDefaultAsync(t => t.Id == request.TableId && t.IsAvailable);
-
-            if (table == null)
-                return BadRequest("Table is unavailable or does not exist.");
-
-            // Reserve table
-            var reservation = new Reservation
-            {
-                Id = Guid.NewGuid(),
-                TableId = table.Id,
-                CustomerName = request.CustomerName,
-                CustomerEmail = request.CustomerEmail,
-                ReservationDate = request.DateAndTime,
-                IsConfirmed = false
-            };
-
-            table.IsAvailable = false;
-
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
-
-            var response = new ReservationResponseDto(
-                reservation.Id,
-                table.Id,
-                reservation.CustomerName,
-                reservation.ReservationDate,
-                reservation.IsConfirmed
-            );
+            var response = await _tableService.ReserveTable(request);
 
             return Ok(response);
         }

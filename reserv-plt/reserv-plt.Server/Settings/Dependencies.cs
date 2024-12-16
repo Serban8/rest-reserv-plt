@@ -1,4 +1,5 @@
-﻿using reserv_plt.DataLayer;
+﻿using Core.Services;
+using reserv_plt.DataLayer;
 using System.Text.Json.Serialization;
 
 namespace reserv_plt.Server.Settings
@@ -22,7 +23,8 @@ namespace reserv_plt.Server.Settings
 
         private static void AddServices(IServiceCollection services)
         {
-            //services.AddScoped<DeviceService>();
+            services.AddScoped<TableService>();
+            services.AddScoped<FeedbackService>();
         }
 
         private static void AddRepositories(IServiceCollection services)
