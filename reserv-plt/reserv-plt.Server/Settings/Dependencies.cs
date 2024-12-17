@@ -16,12 +16,7 @@ namespace reserv_plt.Server.Settings
             });
             applicationBuilder.Services.AddSwaggerGen();
 
-            applicationBuilder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseMySQL(
-                    applicationBuilder.Configuration.GetConnectionString("Connection"),
-                    b => b.MigrationsAssembly("reserv-plt.Server")
-
-                ));
+            applicationBuilder.Services.AddDbContext<AppDbContext>();
 
             AddRepositories(applicationBuilder.Services);
             AddServices(applicationBuilder.Services);
