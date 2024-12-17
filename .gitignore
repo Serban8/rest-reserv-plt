@@ -401,3 +401,4 @@ FodyWeavers.xsd
 
 #User-defined Exclusions
 reserv-plt.db*
+*.vpp.*
