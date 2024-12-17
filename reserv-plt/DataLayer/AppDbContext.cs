@@ -19,6 +19,10 @@ namespace DataLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //constraints
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+            //relationships
             modelBuilder.Entity<Table>().
                 HasMany(t => t.Reservations).
                 WithOne(r => r.Table).

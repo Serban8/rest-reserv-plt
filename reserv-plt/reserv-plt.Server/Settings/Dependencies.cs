@@ -27,6 +27,10 @@ namespace reserv_plt.Server.Settings
         {
             services.AddScoped<TableService>();
             services.AddScoped<FeedbackService>();
+            services.AddScoped<UserService>();
+
+            services.AddScoped<AuthorizationService>();
+            services.AddScoped<AuthenticationService>();
         }
 
         private static void AddRepositories(IServiceCollection services)

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Dtos;
+using Core.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace reserv_plt.Server.Controllers
@@ -7,16 +9,50 @@ namespace reserv_plt.Server.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        [HttpPost("register")]
-        public async Task<StatusCodeResult> Register()
+        private readonly UserService _userService;
+
+        public AccountController(UserService userService)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            _userService = userService;
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserRegisterDto registerData)
+        {
+            try
+            {
+                await _userService.Register(registerData);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [HttpPost("login")]
-        public async Task<StatusCodeResult> Login()
+        public async Task<IActionResult> Login(UserLoginDto loginData)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                var token = await _userService.Login(loginData);
+                return Ok(token);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
     }

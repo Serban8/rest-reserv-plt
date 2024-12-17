@@ -15,7 +15,10 @@ namespace reserv_plt.Server.Controllers
             _feedbackService = feedbackService;
         }
 
-        // POST: api/Feedback
+        /// <summary>
+        /// MOCK
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("submit-feedback")]
         public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackDto feedbackDto)
         {
@@ -29,7 +32,10 @@ namespace reserv_plt.Server.Controllers
             return Ok("Feedback submitted successfully.");
         }
 
-        // GET: api/Feedback
+        /// <summary>
+        /// MOCK
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("get-feedback")]
         public async Task<IActionResult> GetFeedbacks()
         {

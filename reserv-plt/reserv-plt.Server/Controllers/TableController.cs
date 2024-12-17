@@ -16,7 +16,10 @@ namespace reserv_plt.Server.Controllers
             _tableService = tableService;
         }
 
-        // GET: api/Table
+        /// <summary>
+        /// MOCK
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("all-tables")]
         public async Task<IActionResult> GetAvailableTables()
         {
@@ -24,7 +27,11 @@ namespace reserv_plt.Server.Controllers
             return Ok(tables);
         }
 
-        // POST: api/Table/Reserve
+        /// <summary>
+        /// MOCK
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("reserve-table")]
         public async Task<IActionResult> ReserveTable([FromBody] ReservationRequestDto request)
         {

@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace DataLayer.Repositories
     {
         public UserRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await DbSet.FirstOrDefaultAsync(e => e.Email == email);
         }
     }
 }
