@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using reserv_plt.Core.Dtos;
-using reserv_plt.DataLayer.Models; 
-using reserv_plt.DataLayer;
+using Core.Dtos;
 using Core.Services;
 
 namespace reserv_plt.Server.Controllers
@@ -19,7 +17,7 @@ namespace reserv_plt.Server.Controllers
         }
 
         // GET: api/Table
-        [HttpGet]
+        [HttpGet("all-tables")]
         public async Task<IActionResult> GetAvailableTables()
         {
             var tables = await _tableService.GetAvailableTables();
@@ -27,7 +25,7 @@ namespace reserv_plt.Server.Controllers
         }
 
         // POST: api/Table/Reserve
-        [HttpPost("Reserve")]
+        [HttpPost("reserve-table")]
         public async Task<IActionResult> ReserveTable([FromBody] ReservationRequestDto request)
         {
             var response = await _tableService.ReserveTable(request);

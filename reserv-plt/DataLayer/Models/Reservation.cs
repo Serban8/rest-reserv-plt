@@ -1,16 +1,16 @@
-﻿namespace reserv_plt.DataLayer.Models
+﻿using DataLayer.Models;
+
+namespace DataLayer.Models
 {
-    public class Reservation
+    public class Reservation : BaseModel
     {
-
-        public Guid Id { get; set; }
-        public Guid TableId { get; set; }
-        public Table Table { get; set; }
-
-        public string CustomerName { get; set; }
-        public string CustomerEmail{ get; set; }
         public DateTime ReservationDate { get; set; }
-        public bool IsConfirmed { get; set; } = false;
+        public int NumberOfPeople { get; set; }
 
+        public Guid TableID { get; set; }
+        public Table Table { get; set; }
+        public Guid UserID { get; set; }
+        public User User { get; set; }
+        public Confirmation Confirmation { get; set; } = new Confirmation();
     }
 }

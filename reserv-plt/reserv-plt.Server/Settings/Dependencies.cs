@@ -1,7 +1,8 @@
 ﻿using Core.Services;
 using Microsoft.EntityFrameworkCore;
-using reserv_plt.DataLayer;
+using DataLayer;
 using System.Text.Json.Serialization;
+using DataLayer.Repositories;
 
 namespace reserv_plt.Server.Settings
 {
@@ -30,6 +31,10 @@ namespace reserv_plt.Server.Settings
 
         private static void AddRepositories(IServiceCollection services)
         {
+            services.AddScoped<TableRepository>();
+            services.AddScoped<FeedbackRepository>();
+            services.AddScoped<ReservationRepository>();
+            services.AddScoped<UserRepository>();
         }
     }
 }

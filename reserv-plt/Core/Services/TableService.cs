@@ -1,70 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using reserv_plt.Core.Dtos;
-using reserv_plt.DataLayer;
-using reserv_plt.DataLayer.Models;
+using Core.Dtos;
+using DataLayer;
+using DataLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataLayer.Repositories;
 
 namespace Core.Services
 {
     public class TableService
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly TableRepository _tableRepository;
+        private readonly ReservationRepository _reservationRepository;
 
-        public TableService(AppDbContext appDbContext)
+        public TableService(TableRepository tableRepository, ReservationRepository reservationRepository)
         {
-            _appDbContext = appDbContext;
+            _tableRepository = tableRepository;
+            _reservationRepository = reservationRepository;
         }
 
         public async Task<IEnumerable<TableDto>> GetAvailableTables()
         {
-            var tables = await _appDbContext.Tables
-                .Where(t => t.IsAvailable)
+            var tables = await _tableRepository.GetAllAsync();
+            var tableDtos = tables
                 .Select(t => new TableDto(
                     t.Id,
                     t.TableNumber,
-                    t.IsAvailable
-                ))
-                .ToListAsync();
-            return tables;
+                    true
+                ));
+
+            return tableDtos;
         }
 
         public async Task<ReservationResponseDto> ReserveTable(ReservationRequestDto request)
         {
-            var table = await _appDbContext.Tables
-                .FirstOrDefaultAsync(t => t.Id == request.TableId && t.IsAvailable);
 
-            if (table == null)
-                return null;
-
-            // Reserve table
-            var reservation = new Reservation
-            {
-                Id = Guid.NewGuid(),
-                TableId = table.Id,
-                CustomerName = request.CustomerName,
-                CustomerEmail = request.CustomerEmail,
-                ReservationDate = request.DateAndTime,
-                IsConfirmed = false
-            };
-
-            table.IsAvailable = false;
-
-            _appDbContext.Reservations.Add(reservation);
-            await _appDbContext.SaveChangesAsync();
-
-            var response = new ReservationResponseDto(
-                reservation.Id,
-                table.Id,
-                reservation.CustomerName,
-                reservation.ReservationDate,
-                reservation.IsConfirmed
-            );
-
-            return response;
+            return null;
         }
     }
 }

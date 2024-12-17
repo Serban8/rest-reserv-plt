@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using reserv_plt.DataLayer;
-using reserv_plt.Core.Dtos;
-using reserv_plt.DataLayer.Models;
+using Core.Dtos;
 using Core.Services;
 
 namespace reserv_plt.Server.Controllers
@@ -19,7 +16,7 @@ namespace reserv_plt.Server.Controllers
         }
 
         // POST: api/Feedback
-        [HttpPost]
+        [HttpPost("submit-feedback")]
         public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackDto feedbackDto)
         {
             bool ret = await _feedbackService.Add(feedbackDto);
@@ -33,7 +30,7 @@ namespace reserv_plt.Server.Controllers
         }
 
         // GET: api/Feedback
-        [HttpGet]
+        [HttpGet("get-feedback")]
         public async Task<IActionResult> GetFeedbacks()
         {
             var feedbacks = await _feedbackService.GetFeedbacks();

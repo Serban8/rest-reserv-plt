@@ -1,11 +1,13 @@
-﻿namespace reserv_plt.DataLayer.Models
+﻿using DataLayer.Models;
+
+namespace DataLayer.Models
 {
-    public class Table
+    public class Table : BaseModel
     {
-        public Guid Id { get; set; }
         public int TableNumber { get; set; } 
-        public bool IsAvailable { get; set; } = true;
+        public int Seats { get; set; }
 
 
+        public List<Reservation> Reservations { get; set; }
     }
 }

@@ -1,10 +1,14 @@
-﻿namespace reserv_plt.DataLayer.Models
+﻿using DataLayer.Models;
+
+namespace DataLayer.Models
 {
-    public class Feedback
+    public class Feedback : BaseModel
     {
-        public Guid Id { get; set; }
-        public string CustomerName { get; set; }
         public string Comment { get; set; }
         public int Rating { get; set; }
+
+
+        public Guid UserID { get; set; }
+        public User User { get; set; }
     }
 }

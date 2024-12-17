@@ -1,4 +1,4 @@
-﻿namespace reserv_plt.Core.Dtos
+﻿namespace Core.Dtos
 {
     public class ReservationRequestDto
     {
