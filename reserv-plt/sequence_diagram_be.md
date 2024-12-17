@@ -1,9 +1,10 @@
 ```mermaid
 
-sequenceDiagram
+    sequenceDiagram
     participant Customer as Customer:User
     participant AuthentificationController as :AuthentificationController
     participant AuthentificationService as :AuthentificationService
+    participant AuthorizationService as :AuthorizationService
     participant TableController as :TableController
     participant TableService as :TableService
     participant FeedbackController as :FeedbackController
@@ -14,22 +15,21 @@ sequenceDiagram
 
     alt
     Customer-)AuthentificationController: Login(LoginDto)
-    AuthentificationController ->> AuthentificationService: validatesLogin() 
-    AuthentificationService ->> Database: getUser()
-
-    Database ->> AuthentificationService: UserDto
-    AuthentificationService ->> AuthentificationController: UserDto
-    AuthentificationController ->> Customer: UserDto
+    AuthentificationController ->> AuthentificationService: Login(LoginDto) 
+    AuthentificationService -) AuthorizationService: GetByEmailAsync()
+    AuthentificationService ->> AuthorizationService: VerifyHashedPassword()
+    break when VerifyHashedPassword() == false
+        AuthorizationService ->> AuthentificationService: throw UnauthorizedAccessException
+    end
+    AuthentificationService ->> AuthorizationService: GetToken()
+    AuthentificationService ->> AuthentificationController: tokenString
+    AuthentificationController ->> Customer: tokenString
 
     else
 
     Customer -) AuthentificationController:  Register(RegisterDto)
-    AuthentificationController ->> AuthentificationService: registers()
-    AuthentificationService -) Database: addUser()
-
-    Database ->> AuthentificationService: UserDto
-    AuthentificationService ->> AuthentificationController: UserDto
-    AuthentificationController ->> Customer: UserDto
+    AuthentificationController ->> AuthentificationService: Register(RegisterDto)
+    AuthentificationService -) Database: <<creates>>
     
     end
     
@@ -70,20 +70,6 @@ sequenceDiagram
     Database ->> FeedbackService: List<FeedbackDto>
     FeedbackService ->> FeedbackController: List<FeedbackDto>
     FeedbackController ->> Customer: Ok(List<FeedbackDto>)
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ```
