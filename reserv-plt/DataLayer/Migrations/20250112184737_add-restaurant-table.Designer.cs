@@ -3,6 +3,7 @@ using System;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace reserv_plt.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250112184737_add-restaurant-table")]
+    partial class addrestauranttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.11");
@@ -53,15 +56,12 @@ namespace reserv_plt.Server.Migrations
                     b.Property<Guid>("ReservationId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("RestaurantId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("UserID")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("ReservationId");
 
                     b.HasIndex("UserID");
 
@@ -72,9 +72,6 @@ namespace reserv_plt.Server.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("FeedbackID")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsFinished")
@@ -96,9 +93,6 @@ namespace reserv_plt.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FeedbackID")
-                        .IsUnique();
 
                     b.HasIndex("RestaurantId");
 
@@ -221,9 +215,11 @@ namespace reserv_plt.Server.Migrations
 
             modelBuilder.Entity("DataLayer.Models.Feedback", b =>
                 {
-                    b.HasOne("DataLayer.Models.Restaurant", null)
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("RestaurantId");
+                    b.HasOne("DataLayer.Models.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DataLayer.Models.User", "User")
                         .WithMany("Feedbacks")
@@ -231,19 +227,15 @@ namespace reserv_plt.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Reservation");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataLayer.Models.Reservation", b =>
                 {
-                    b.HasOne("DataLayer.Models.Feedback", "Feedback")
-                        .WithOne("Reservation")
-                        .HasForeignKey("DataLayer.Models.Reservation", "FeedbackID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DataLayer.Models.Restaurant", "Restaurant")
-                        .WithMany("Reservations")
+                        .WithMany()
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -260,8 +252,6 @@ namespace reserv_plt.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Feedback");
-
                     b.Navigation("Restaurant");
 
                     b.Navigation("Table");
@@ -272,7 +262,7 @@ namespace reserv_plt.Server.Migrations
             modelBuilder.Entity("DataLayer.Models.Table", b =>
                 {
                     b.HasOne("DataLayer.Models.Restaurant", "Restaurant")
-                        .WithMany("Tables")
+                        .WithMany()
                         .HasForeignKey("RestaurantID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -280,25 +270,10 @@ namespace reserv_plt.Server.Migrations
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("DataLayer.Models.Feedback", b =>
-                {
-                    b.Navigation("Reservation")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DataLayer.Models.Reservation", b =>
                 {
                     b.Navigation("Confirmation")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataLayer.Models.Restaurant", b =>
-                {
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("Reservations");
-
-                    b.Navigation("Tables");
                 });
 
             modelBuilder.Entity("DataLayer.Models.Table", b =>

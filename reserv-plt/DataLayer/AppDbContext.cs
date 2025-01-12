@@ -28,6 +28,11 @@ namespace DataLayer
                 WithOne(r => r.Table).
                 HasForeignKey(r => r.TableID);
 
+            modelBuilder.Entity<Table>().
+                HasOne(t => t.Restaurant).
+                WithMany(r => r.Tables).
+                HasForeignKey(t => t.RestaurantID);
+
             modelBuilder.Entity<User>().
                 HasMany(u => u.Reservations).
                 WithOne(r => r.User).
@@ -42,6 +47,16 @@ namespace DataLayer
                 HasOne(r => r.Confirmation).
                 WithOne(c => c.Reservation).
                 HasForeignKey<Confirmation>(c => c.ReservationID);
+
+            modelBuilder.Entity<Reservation>().
+                HasOne(r => r.Restaurant).
+                WithMany(r => r.Reservations).
+                HasForeignKey(r => r.RestaurantId);
+
+            modelBuilder.Entity<Feedback>().
+                HasOne(f => f.Reservation).
+                WithOne(r => r.Feedback).
+                HasForeignKey<Reservation>(r => r.FeedbackID);
 
             //define auto-inclusions
             modelBuilder.Entity<Reservation>().Navigation(r => r.Table).AutoInclude();
