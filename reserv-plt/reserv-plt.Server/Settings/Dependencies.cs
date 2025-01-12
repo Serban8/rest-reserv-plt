@@ -28,6 +28,7 @@ namespace reserv_plt.Server.Settings
             services.AddScoped<TableService>();
             services.AddScoped<FeedbackService>();
             services.AddScoped<UserService>();
+            services.AddScoped<RestaurantService>();
 
             services.AddScoped<AuthorizationService>();
             services.AddScoped<AuthenticationService>();
@@ -39,6 +40,7 @@ namespace reserv_plt.Server.Settings
             services.AddScoped<FeedbackRepository>();
             services.AddScoped<ReservationRepository>();
             services.AddScoped<UserRepository>();
+            services.AddScoped<RestaurantRepository>();
         }
     }
 }
