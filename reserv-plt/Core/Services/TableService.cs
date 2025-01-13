@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.Repositories;
 using Core.Dtos.AddDtos;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Core.Services
 {
@@ -33,7 +34,11 @@ namespace Core.Services
             {
                 bool available = true;
                 if (table.Reservations != null)
-                    available = table.Reservations.All(r => r.ReservationDate != forDate);
+                    available = table.Reservations.All(r =>
+                    {
+                        TimeSpan timeSpan = r.ReservationDate - forDate;
+                        return timeSpan.TotalMinutes > 90;
+                    });
                 tableDtos.Add(TableDto.FromTable(table, available));
             }
 
@@ -67,7 +72,11 @@ namespace Core.Services
         {
             //Check if the table is available
             var table = await _tableRepository.GetByIdAsync(request.TableID) ?? throw new Exception("Table not found");
-            if (table.Reservations != null && table.Reservations.Any(r => r.ReservationDate == request.ReservationDate))
+            if (table.Reservations != null && table.Reservations.Any(r =>
+            {
+                TimeSpan timeSpan = r.ReservationDate - request.ReservationDate;
+                return timeSpan.TotalMinutes < 90;
+            }))
             {
                 throw new Exception("Table is already reserved for that date and time");
             }
