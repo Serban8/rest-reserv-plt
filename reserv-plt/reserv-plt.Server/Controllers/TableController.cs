@@ -10,10 +10,12 @@ namespace reserv_plt.Server.Controllers
     public class TableController : ControllerBase
     {
         private readonly TableService _tableService;
+        private readonly ReservationService _reservationService;
 
-        public TableController(TableService tableService)
+        public TableController(TableService tableService, ReservationService reservationService)
         {
             _tableService = tableService;
+            _reservationService = reservationService;
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace reserv_plt.Server.Controllers
         {
             try
             {
-                var response = await _tableService.ReserveTable(request);
+                var response = await _reservationService.ReserveTable(request);
 
                 return Ok(response);
             }

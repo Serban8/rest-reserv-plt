@@ -12,7 +12,7 @@ namespace Core.Dtos.AddDtos
         public string Comment { get; set; }
         public int Rating { get; set; }
 
-        public Guid ReservationId { get; set; }
+        public Guid ReservationID { get; set; }
         public Guid UserID { get; set; }
     }
 }

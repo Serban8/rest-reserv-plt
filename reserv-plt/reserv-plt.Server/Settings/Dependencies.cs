@@ -29,6 +29,7 @@ namespace reserv_plt.Server.Settings
             services.AddScoped<FeedbackService>();
             services.AddScoped<UserService>();
             services.AddScoped<RestaurantService>();
+            services.AddScoped<ReservationService>();
 
             services.AddScoped<AuthorizationService>();
             services.AddScoped<AuthenticationService>();

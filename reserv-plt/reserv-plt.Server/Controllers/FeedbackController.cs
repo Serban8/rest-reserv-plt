@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Core.Dtos;
 using Core.Services;
+using Core.Dtos.AddDtos;
 
 namespace reserv_plt.Server.Controllers
 {
@@ -16,30 +17,31 @@ namespace reserv_plt.Server.Controllers
         }
 
         /// <summary>
-        /// MOCK
+        /// Add a feedback for a restaurant
         /// </summary>
         /// <returns></returns>
-        [HttpPost("submit-feedback")]
-        public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackDto feedbackDto)
+        [HttpPost("add-feedback")]
+        public async Task<IActionResult> Add([FromBody] FeedbackAddDto feedbackDto)
         {
-            bool ret = await _feedbackService.Add(feedbackDto);
-
-            if (!ret)
+            try
             {
-                return BadRequest("Failed to submit feedback.");
+                var feedback = await _feedbackService.Add(feedbackDto);
+                return Ok(feedback);
             }
-
-            return Ok("Feedback submitted successfully.");
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
-        /// MOCK
+        /// Get all feedbacks for a restaurant
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-feedback")]
-        public async Task<IActionResult> GetFeedbacks()
+        public async Task<IActionResult> GetFeedbacks(Guid restaurantId)
         {
-            var feedbacks = await _feedbackService.GetFeedbacks();
+            var feedbacks = await _feedbackService.GetFeedbacks(restaurantId);
 
             return Ok(feedbacks);
         }

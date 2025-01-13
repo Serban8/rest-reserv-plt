@@ -1,4 +1,6 @@
-﻿namespace Core.Dtos
+﻿using DataLayer.Models;
+
+namespace Core.Dtos
 {
     public class ReservationResponseDto
     {
@@ -19,5 +21,10 @@
         public DateTime ReservationDate { get; internal set; }
 
         public bool IsConfirmed { get; internal set; }
+
+        public static ReservationResponseDto FromReservation(Reservation reservation)
+        {
+            return new ReservationResponseDto(reservation.Id, reservation.TableID, reservation.Table.TableNumber, reservation.User.FirstName, reservation.ReservationDate, reservation.Confirmation.IsConfirmed);
+        }
     }
 }

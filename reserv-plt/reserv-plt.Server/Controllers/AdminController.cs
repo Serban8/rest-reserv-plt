@@ -12,11 +12,13 @@ namespace reserv_plt.Server.Controllers
     {
         private readonly RestaurantService _restaurantService;
         private readonly TableService _tableService;
+        private readonly ReservationService _reservationService;
 
-        public AdminController(RestaurantService restaurantService, TableService tableService)
+        public AdminController(RestaurantService restaurantService, TableService tableService, ReservationService reservationService)
         {
             _restaurantService = restaurantService;
             _tableService = tableService;
+            _reservationService = reservationService;
         }
 
         /// <summary>
@@ -87,11 +89,22 @@ namespace reserv_plt.Server.Controllers
         }
 
         /// <summary>
+        /// Get all reservations for a restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
+        [HttpGet("get-all-reservations")]
+        public async Task<IActionResult> GetAllReservations(Guid restaurantId)
+        {
+            return Ok(await _reservationService.GetAllForRestaurant(restaurantId));
+        }
+
+        /// <summary>
         /// MOCK
         /// </summary>
         /// <returns></returns>
         [HttpPost("confirm-reservation")]
-        public async Task<IActionResult> ManuallyConfirmReservation()
+        public async Task<IActionResult> ManuallyConfirmReservation(Guid reservationId)
         {
             return StatusCode(StatusCodes.Status501NotImplemented);
         }
@@ -101,7 +114,7 @@ namespace reserv_plt.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("cancel-reservation")]
-        public async Task<IActionResult> ManuallyCancelReservation()
+        public async Task<IActionResult> ManuallyCancelReservation(Guid reservationId)
         {
             return StatusCode(StatusCodes.Status501NotImplemented);
         }

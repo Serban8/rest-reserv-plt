@@ -68,44 +68,11 @@ namespace Core.Services
             await _tableRepository.SaveAllChangesAsync();
         }
 
-        public async Task<ReservationResponseDto> ReserveTable(ReservationRequestDto request)
+        public async Task<List<ReservationResponseDto>> GetAllReservations(Guid tableId)
         {
-            //Check if the table is available
-            var table = await _tableRepository.GetByIdAsync(request.TableID) ?? throw new Exception("Table not found");
-            if (table.Reservations != null && table.Reservations.Any(r =>
-            {
-                TimeSpan timeSpan = r.ReservationDate - request.ReservationDate;
-                return timeSpan.TotalMinutes < 90;
-            }))
-            {
-                throw new Exception("Table is already reserved for that date and time");
-            }
+            var reservations = (await _reservationRepository.GetAllAsync()).Where(r => r.TableID == tableId).ToList();
 
-           //check if the table has enough seats
-            if (table.Seats < request.NumberOfPeople)
-            {
-                throw new Exception("Table does not have enough seats");
-            }
-
-            //Create the reservation
-            var reservation = new Reservation
-            {
-                ReservationDate = request.ReservationDate,
-                NumberOfPeople = request.NumberOfPeople,
-                RestaurantId = table.RestaurantID,
-                TableID = request.TableID,
-                UserID = request.UserID
-            };
-
-            reservation = await _reservationRepository.AddAsync(reservation);
-            await _reservationRepository.SaveAllChangesAsync();
-
-            return new ReservationResponseDto(reservation.Id, reservation.TableID, table.TableNumber, request.UserID.ToString(), reservation.ReservationDate, reservation.Confirmation.IsConfirmed);
-        }
-
-        public async Task<List<Reservation>> GetAllReservations(Guid tableId)
-        {
-            return (await _reservationRepository.GetAllAsync()).Where(r => r.TableID == tableId).ToList();
+            return reservations.Select(r => ReservationResponseDto.FromReservation(r)).ToList();
         }
     }
 }

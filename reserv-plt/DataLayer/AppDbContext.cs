@@ -53,14 +53,16 @@ namespace DataLayer
                 WithMany(r => r.Reservations).
                 HasForeignKey(r => r.RestaurantId);
 
-            modelBuilder.Entity<Feedback>().
-                HasOne(f => f.Reservation).
-                WithOne(r => r.Feedback).
-                HasForeignKey<Reservation>(r => r.FeedbackID);
+            modelBuilder.Entity<Reservation>().
+                HasOne(r => r.Feedback).
+                WithOne(f => f.Reservation).
+                HasForeignKey<Feedback>(f => f.ReservationID);
 
             //define auto-inclusions
+            modelBuilder.Entity<Reservation>().Navigation(r => r.User).AutoInclude();
             modelBuilder.Entity<Reservation>().Navigation(r => r.Table).AutoInclude();
             modelBuilder.Entity<Reservation>().Navigation(r => r.Confirmation).AutoInclude();
+            modelBuilder.Entity<Reservation>().Navigation(r => r.Feedback).AutoInclude();
 
             modelBuilder.Entity<Table>().Navigation(t => t.Reservations).AutoInclude();
 
@@ -69,8 +71,8 @@ namespace DataLayer
             modelBuilder.Entity<Feedback>().Navigation(f => f.User).AutoInclude();
             modelBuilder.Entity<Feedback>().Navigation(f => f.Reservation).AutoInclude();
 
-            modelBuilder.Entity<User>().Navigation(u => u.Reservations).AutoInclude();
-            modelBuilder.Entity<User>().Navigation(u => u.Feedbacks).AutoInclude();
+            //modelBuilder.Entity<User>().Navigation(u => u.Reservations).AutoInclude();
+            //modelBuilder.Entity<User>().Navigation(u => u.Feedbacks).AutoInclude();
         }
 
         public DbSet<Table> Tables { get; set; }
