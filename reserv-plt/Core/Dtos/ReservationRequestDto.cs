@@ -1,10 +1,13 @@
-﻿namespace Core.Dtos
+﻿using DataLayer.Models;
+
+namespace Core.Dtos
 {
     public class ReservationRequestDto
     {
-        public Guid TableId { get; internal set; }
-        public string CustomerName { get; internal set; }
-        public string CustomerEmail { get; internal set; }
-        public DateTime DateAndTime { get; internal set; }
+        public DateTime ReservationDate { get; set; }
+        public int NumberOfPeople { get; set; }
+
+        public Guid TableID { get; set; }
+        public Guid UserID { get; set; }
     }
 }

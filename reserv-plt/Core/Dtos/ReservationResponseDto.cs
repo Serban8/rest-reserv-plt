@@ -2,13 +2,11 @@
 {
     public class ReservationResponseDto
     {
-        private Guid id1;
-        private Guid id2;
-
-        public ReservationResponseDto(Guid id1, Guid id2, string customerName, DateTime reservationDate, bool isConfirmed)
+        public ReservationResponseDto(Guid reservationId, Guid tableId, int tableNumber, string customerName, DateTime reservationDate, bool isConfirmed)
         {
-            this.id1 = id1;
-            this.id2 = id2;
+            ReservationId = reservationId;
+            TableId = tableId;
+            TableNumber = tableNumber;
             CustomerName = customerName;
             ReservationDate = reservationDate;
             IsConfirmed = isConfirmed;
@@ -16,9 +14,8 @@
 
         public Guid ReservationId { get; internal set; }
         public Guid TableId { get; internal set; }
-
-        string CustomerName { get; set; }
-
+        public int TableNumber { get; internal set; }
+        public string CustomerName { get; internal set; }
         public DateTime ReservationDate { get; internal set; }
 
         public bool IsConfirmed { get; internal set; }

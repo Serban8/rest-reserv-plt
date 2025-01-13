@@ -15,7 +15,7 @@ namespace DataLayer.Models
         public Guid UserID { get; set; }
         public User User { get; set; }
         public Confirmation Confirmation { get; set; } = new Confirmation();
-        public Guid FeedbackID { get; set; }
+        public Guid? FeedbackID { get; set; } = null;
         public Feedback Feedback { get; set; }
     }
 }

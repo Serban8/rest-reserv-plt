@@ -9,7 +9,7 @@ namespace Core.Dtos
 {
     public class RestaurantDto
     {
-        public RestaurantDto(Guid id, string name, string address, string phoneNumber, string email, string website, string description, string imageUrl, string schedule)
+        public RestaurantDto(string name, string address, string phoneNumber, string email, string website, string description, string imageUrl, string schedule, Guid? id = null)
         {
             Id = id;
             Name = name;
@@ -22,7 +22,7 @@ namespace Core.Dtos
             Schedule = schedule;
         }
 
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; } = null;
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -34,7 +34,7 @@ namespace Core.Dtos
 
         public static RestaurantDto FromRestaurant(Restaurant restaurant)
         {
-            return new RestaurantDto(restaurant.Id, restaurant.Name, restaurant.Address, restaurant.PhoneNumber, restaurant.Email, restaurant.Website, restaurant.Description, restaurant.ImageUrl, restaurant.Schedule);
+            return new RestaurantDto(restaurant.Name, restaurant.Address, restaurant.PhoneNumber, restaurant.Email, restaurant.Website, restaurant.Description, restaurant.ImageUrl, restaurant.Schedule, restaurant.Id);
         }
 
         public static List<RestaurantDto> FromRestaurantList(List<Restaurant> restaurants)

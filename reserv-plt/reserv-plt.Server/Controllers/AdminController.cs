@@ -1,4 +1,5 @@
 ﻿using Core.Dtos;
+using Core.Dtos.AddDtos;
 using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace reserv_plt.Server.Controllers
     public class AdminController : ControllerBase
     {
         private readonly RestaurantService _restaurantService;
+        private readonly TableService _tableService;
 
-        public AdminController(RestaurantService restaurantService)
+        public AdminController(RestaurantService restaurantService, TableService tableService)
         {
             _restaurantService = restaurantService;
+            _tableService = tableService;
         }
 
         /// <summary>
@@ -52,9 +55,17 @@ namespace reserv_plt.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("add-table")]
-        public async Task<IActionResult> AddTable()
+        public async Task<IActionResult> AddTable(TableAddDto table)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try 
+            {
+                var retTable = await _tableService.Add(table);
+                return Ok(retTable);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -62,33 +73,21 @@ namespace reserv_plt.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("remove-table")]
-        public async Task<IActionResult> RemoveTable()
+        public async Task<IActionResult> RemoveTable(Guid id)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                await _tableService.Delete(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
-        /// Updates a table in a restaurant
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut("update-table")]
-        public async Task<IActionResult> UpdateTable()
-        {
-            return StatusCode(StatusCodes.Status501NotImplemented);
-        }
-
-        /// <summary>
-        /// Get all reservations
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("reservations")]
-        public async Task<IActionResult> GetReservations()
-        {
-            return StatusCode(StatusCodes.Status501NotImplemented);
-        }
-
-        /// <summary>
-        /// Manually confirm a reservation
+        /// MOCK
         /// </summary>
         /// <returns></returns>
         [HttpPost("confirm-reservation")]
@@ -98,7 +97,7 @@ namespace reserv_plt.Server.Controllers
         }
 
         /// <summary>
-        /// Manually cancel a reservation
+        /// MOCK
         /// </summary>
         /// <returns></returns>
         [HttpPost("cancel-reservation")]

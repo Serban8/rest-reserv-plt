@@ -103,5 +103,19 @@ namespace Core.Services
             _restaurantRepository.DeleteAsync(restaurant);
             await _restaurantRepository.SaveAllChangesAsync();
         }
+
+        public async Task<List<TableDto>> GetAllTables(Guid restaurantId)
+        {
+            var restaurant = await _restaurantRepository.GetByIdAsync(restaurantId) ?? throw new Exception("Restaurant not found");
+
+            List<TableDto> tables = [];
+            
+            foreach (var table in restaurant.Tables)
+            {
+                tables.Add(TableDto.FromTable(table, true));
+            }
+
+            return tables;
+        }
     }
 }

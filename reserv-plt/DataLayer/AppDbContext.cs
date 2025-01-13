@@ -62,6 +62,13 @@ namespace DataLayer
             modelBuilder.Entity<Reservation>().Navigation(r => r.Table).AutoInclude();
             modelBuilder.Entity<Reservation>().Navigation(r => r.Confirmation).AutoInclude();
 
+            modelBuilder.Entity<Table>().Navigation(t => t.Reservations).AutoInclude();
+
+            modelBuilder.Entity<Restaurant>().Navigation(r => r.Tables).AutoInclude();
+
+            modelBuilder.Entity<Feedback>().Navigation(f => f.User).AutoInclude();
+            modelBuilder.Entity<Feedback>().Navigation(f => f.Reservation).AutoInclude();
+
             modelBuilder.Entity<User>().Navigation(u => u.Reservations).AutoInclude();
             modelBuilder.Entity<User>().Navigation(u => u.Feedbacks).AutoInclude();
         }

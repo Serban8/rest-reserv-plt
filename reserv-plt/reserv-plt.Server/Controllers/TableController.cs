@@ -17,27 +17,34 @@ namespace reserv_plt.Server.Controllers
         }
 
         /// <summary>
-        /// MOCK
+        /// Get all of the tables for a restaurant
         /// </summary>
         /// <returns></returns>
         [HttpGet("all-tables")]
-        public async Task<IActionResult> GetAvailableTables()
+        public async Task<IActionResult> GetAllTables(Guid restaurantId, DateTime forDate)
         {
-            var tables = await _tableService.GetAvailableTables();
+            var tables = await _tableService.GetAllAvailableTables(restaurantId, forDate);
             return Ok(tables);
         }
 
         /// <summary>
-        /// MOCK
+        /// Reserve a table
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("reserve-table")]
         public async Task<IActionResult> ReserveTable([FromBody] ReservationRequestDto request)
         {
-            var response = await _tableService.ReserveTable(request);
+            try
+            {
+                var response = await _tableService.ReserveTable(request);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
