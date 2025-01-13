@@ -100,23 +100,58 @@ namespace reserv_plt.Server.Controllers
         }
 
         /// <summary>
-        /// MOCK
+        /// Manually confirm a reservation
         /// </summary>
         /// <returns></returns>
-        [HttpPost("confirm-reservation")]
+        [HttpPut("confirm-reservation")]
         public async Task<IActionResult> ManuallyConfirmReservation(Guid reservationId)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                await _reservationService.ConfirmReservation(reservationId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
-        /// MOCK
+        /// Cancel a reservation. This deletes the reservation from the database and its associated confirmation
         /// </summary>
         /// <returns></returns>
-        [HttpPost("cancel-reservation")]
+        [HttpDelete("cancel-reservation")]
         public async Task<IActionResult> ManuallyCancelReservation(Guid reservationId)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                await _reservationService.DeleteReservation(reservationId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Manually finish a reservation
+        /// </summary>
+        /// <param name="reservationId"></param>
+        /// <returns></returns>
+        [HttpPut("finish-reservation")]
+        public async Task<IActionResult> ManuallyFinishReservation(Guid reservationId)
+        {
+            try
+            {
+                await _reservationService.FinishReservation(reservationId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

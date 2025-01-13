@@ -42,6 +42,7 @@ namespace reserv_plt.Server.Settings
             services.AddScoped<ReservationRepository>();
             services.AddScoped<UserRepository>();
             services.AddScoped<RestaurantRepository>();
+            services.AddScoped<ConfirmationRepository>();
         }
     }
 }

@@ -15,6 +15,12 @@ namespace reserv_plt.Server.Controllers
         {
             _userService = userService;
         }
+
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="registerData"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterDto registerData)
         {
@@ -33,6 +39,11 @@ namespace reserv_plt.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Login a user
+        /// </summary>
+        /// <param name="loginData"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto loginData)
         {

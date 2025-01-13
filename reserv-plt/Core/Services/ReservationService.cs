@@ -13,11 +13,13 @@ namespace Core.Services
     {
         private readonly ReservationRepository _reservationRepository;
         private readonly TableRepository _tableRepository;
+        private readonly ConfirmationRepository _confirmationRepository;
 
-        public ReservationService(ReservationRepository reservationRepository, TableRepository tableRepository)
+        public ReservationService(ReservationRepository reservationRepository, TableRepository tableRepository, ConfirmationRepository confirmationRepository)
         {
             _reservationRepository = reservationRepository;
             _tableRepository = tableRepository;
+            _confirmationRepository = confirmationRepository;
         }
 
         public async Task<ReservationResponseDto> ReserveTable(ReservationRequestDto request)
@@ -27,7 +29,7 @@ namespace Core.Services
             if (table.Reservations != null && table.Reservations.Any(r =>
             {
                 TimeSpan timeSpan = r.ReservationDate - request.ReservationDate;
-                return timeSpan.TotalMinutes < 90;
+                return Math.Abs(timeSpan.TotalMinutes) < 90;
             }))
             {
                 throw new Exception("Table is already reserved for that date and time");
@@ -67,6 +69,30 @@ namespace Core.Services
             var reservations = (await _reservationRepository.GetAllAsync()).Where(r => r.RestaurantId == restaurantId).ToList();
 
             return reservations.Select(r => ReservationResponseDto.FromReservation(r)).ToList();
+        }
+
+        public async Task FinishReservation(Guid reservationId)
+        {
+            var reservation = await _reservationRepository.GetByIdAsync(reservationId) ?? throw new Exception("Reservation not found");
+            reservation.IsFinished = true;
+
+            await _reservationRepository.SaveAllChangesAsync();
+        }
+
+        public async Task ConfirmReservation(Guid reservationId)
+        {
+            var reservation = await _reservationRepository.GetByIdAsync(reservationId) ?? throw new Exception("Reservation not found");
+            reservation.Confirmation.IsConfirmed = true;
+
+            await _reservationRepository.SaveAllChangesAsync();
+        }
+
+        public async Task DeleteReservation(Guid reservationId)
+        {
+            var reservation = await _reservationRepository.GetByIdAsync(reservationId) ?? throw new Exception("Reservation not found");
+            _confirmationRepository.DeleteAsync(reservation.Confirmation);
+            _reservationRepository.DeleteAsync(reservation);
+            await _reservationRepository.SaveAllChangesAsync();
         }
     }
 }
