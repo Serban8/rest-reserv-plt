@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using DataLayer;
 using System.Text.Json.Serialization;
 using DataLayer.Repositories;
+using Core.Services.BackgroundServices;
 
 namespace reserv_plt.Server.Settings
 {
@@ -33,7 +34,10 @@ namespace reserv_plt.Server.Settings
 
             services.AddScoped<AuthorizationService>();
             services.AddScoped<AuthenticationService>();
+
             services.AddSingleton<EmailService>();
+
+            services.AddHostedService<ReservationUpdateService>();
         }
 
         private static void AddRepositories(IServiceCollection services)

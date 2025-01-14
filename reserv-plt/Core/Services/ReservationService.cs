@@ -33,7 +33,7 @@ namespace Core.Services
             if (table.Reservations != null && table.Reservations.Any(r =>
             {
                 TimeSpan timeSpan = r.ReservationDate - request.ReservationDate;
-                return Math.Abs(timeSpan.TotalMinutes) < 90;
+                return Math.Abs(timeSpan.TotalMinutes) < 60;
             }))
             {
                 throw new Exception("Table is already reserved for that date and time");
@@ -107,6 +107,11 @@ namespace Core.Services
             _confirmationRepository.DeleteAsync(reservation.Confirmation);
             _reservationRepository.DeleteAsync(reservation);
             await _reservationRepository.SaveAllChangesAsync();
+        }
+
+        public async Task<List<Reservation>> GetAll()
+        {
+            return await _reservationRepository.GetAllAsync();
         }
     }
 }
