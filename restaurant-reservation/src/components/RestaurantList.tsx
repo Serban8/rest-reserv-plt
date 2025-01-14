@@ -1,25 +1,38 @@
-import React from "react";
-import { Card, CardContent, Typography, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { restaurants } from "../data/mockData.ts";
+import instance from "../api/axios"; // Axios instance
 
 const RestaurantList: React.FC = () => {
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await instance.get("/Restaurant/all-restaurants");
+        setRestaurants(response.data);
+      } catch (error) {
+        console.error("Error fetching restaurants:", error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   return (
-    <Grid container spacing={3} padding={3}>
-      {restaurants.map((restaurant) => (
-        <Grid item xs={12} sm={6} md={4} key={restaurant.id}>
-          <Card sx={{ boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h5">{restaurant.name}</Typography>
-              <Typography color="text.secondary">{restaurant.description}</Typography>
-              <Link to={`/restaurant/${restaurant.id}`} style={{ textDecoration: "none" }}>
-                <Typography color="primary" sx={{ mt: 2 }}>View Details</Typography>
-              </Link>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+    <div>
+      <h2>Restaurants</h2>
+      <ul>
+        {restaurants.map((restaurant) => (
+          <li key={restaurant.id}>
+            <h3>{restaurant.name}</h3>
+            <p>{restaurant.description}</p>
+            <Link to={`/restaurant/${restaurant.id}`}>
+              <button>View Details</button>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

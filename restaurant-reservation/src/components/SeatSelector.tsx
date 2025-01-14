@@ -1,45 +1,40 @@
 import React, { useState } from "react";
-import { Button, Grid, Typography, Container } from "@mui/material";
-import { seatLayout } from "../data/mockData.ts";
+import { Button, Grid } from "@mui/material";
 
-interface SeatSelectorProps {
-  onConfirm: (selectedSeats: number[]) => void;
-}
+const SeatSelector = ({ tables, onConfirm }) => {
+  const [selectedTables, setSelectedTables] = useState([]);
 
-const SeatSelector: React.FC<SeatSelectorProps> = ({ onConfirm }) => {
-  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
-
-  const toggleSeat = (id: number) => {
-    setSelectedSeats((prev) =>
-      prev.includes(id) ? prev.filter((seat) => seat !== id) : [...prev, id]
+  const toggleTable = (tableId) => {
+    setSelectedTables((prev) =>
+      prev.includes(tableId)
+        ? prev.filter((id) => id !== tableId)
+        : [...prev, tableId]
     );
   };
 
   return (
-    <Container>
-      <Typography variant="h5" sx={{ mb: 2 }}>Select Your Seats</Typography>
+    <div>
+      <h3>Select a Table</h3>
       <Grid container spacing={2}>
-        {seatLayout.map((seat) => (
-          <Grid item key={seat.id}>
+        {tables.map((table) => (
+          <Grid item key={table.id}>
             <Button
               variant="contained"
-              color={selectedSeats.includes(seat.id) ? "success" : "secondary"}
-              onClick={() => toggleSeat(seat.id)}
+              color={selectedTables.includes(table.id) ? "success" : "secondary"}
+              onClick={() => toggleTable(table.id)}
             >
-              {seat.label}
+              {`Table ${table.tableNumber} (${table.seats} seats)`}
             </Button>
           </Grid>
         ))}
       </Grid>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 3 }}
-        onClick={() => onConfirm(selectedSeats)}
+      <button
+        onClick={() => onConfirm(selectedTables)}
+        disabled={selectedTables.length === 0}
       >
         Confirm Reservation
-      </Button>
-    </Container>
+      </button>
+    </div>
   );
 };
 
