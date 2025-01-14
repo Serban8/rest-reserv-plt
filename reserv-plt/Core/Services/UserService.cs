@@ -67,5 +67,25 @@ namespace Core.Services
             // return token
             return _authorizationService.GetToken(user, "RRPUser");
         }
+
+        public async Task<string> GetEmail(Guid userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId)
+                ?? throw new Exception("User not found");
+
+            return user.Email;
+        }
+
+        
+        public async Task<string> GetFirstName(Guid userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId)
+                ?? throw new Exception("User not found");
+
+            return user.FirstName;
+        }
     }
+
+
 }
+

@@ -33,6 +33,7 @@ namespace reserv_plt.Server.Settings
 
             services.AddScoped<AuthorizationService>();
             services.AddScoped<AuthenticationService>();
+            services.AddSingleton<EmailService>();
         }
 
         private static void AddRepositories(IServiceCollection services)

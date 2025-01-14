@@ -14,12 +14,16 @@ namespace Core.Services
         private readonly ReservationRepository _reservationRepository;
         private readonly TableRepository _tableRepository;
         private readonly ConfirmationRepository _confirmationRepository;
+        private readonly UserService _userService;
+        private readonly EmailService _emailService;
 
-        public ReservationService(ReservationRepository reservationRepository, TableRepository tableRepository, ConfirmationRepository confirmationRepository)
+        public ReservationService(ReservationRepository reservationRepository, TableRepository tableRepository, ConfirmationRepository confirmationRepository, UserService userService, EmailService emailService)
         {
             _reservationRepository = reservationRepository;
             _tableRepository = tableRepository;
             _confirmationRepository = confirmationRepository;
+            _userService = userService;
+            _emailService = emailService;
         }
 
         public async Task<ReservationResponseDto> ReserveTable(ReservationRequestDto request)
@@ -53,6 +57,16 @@ namespace Core.Services
 
             reservation = await _reservationRepository.AddAsync(reservation);
             await _reservationRepository.SaveAllChangesAsync();
+
+
+            var email = await _userService.GetEmail(request.UserID);
+            var firstName = await _userService.GetFirstName(request.UserID);
+
+            await _emailService.SendReservationEmailAsync(
+                recipientEmail: email,  
+                recipientName: firstName,    
+                reservationId: reservation.Id
+            );
 
             return ReservationResponseDto.FromReservation(reservation);
         }
