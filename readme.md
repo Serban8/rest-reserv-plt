@@ -5,5 +5,6 @@
 - Pentru finalizarea unei rezervări, va fi necesară o confirmare via email (în apropierea temporală a datei rezervării);
   - în absența confirmării, rezervarea va fi anulată automat.
 - Odată finalizată rezervarea, după încheierea evenimentului asociat rezervării, platforma va permite adăugarea de feedback pentru restaurant.
-  - Feedbackul evaluat pozitiv (thumbs up/down) va oferi beneficii noi utilizatorilor (rezervarea cu mai multe zile în avans, pentru mai multe persoane, etc.).
-    
+
+# DOCUMENTATIE
+https://docs.google.com/document/d/1ctYWZs4oaBWhpTEzOSCcwHNT3C4n3yyqmUt_-S-eQGQ/edit?usp=sharing
